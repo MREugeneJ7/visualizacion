@@ -11,7 +11,7 @@ from src.transformers.csvTransformer import CSVTransformer
 
 class Reader:
 
-    def __init__(self, filePath: str):
+    def __init__(self, filePath: str) -> None: 
         if not os.path.exists(filePath):
             raise OSError('Invalid file path passed to Reader.')
         if not os.path.isfile(filePath):
@@ -20,14 +20,13 @@ class Reader:
         self.transformer: Optional[SourceTransformer] = None
         self.dataframe: Optional[DataFrame] = None
 
-    def read(self):
+    def read(self) -> None:
         _, fileExtension = os.path.splitext(self.filePath)
         if fileExtension == '.csv':
             self.transformer: Optional[SourceTransformer] = CSVTransformer(self.filePath)
             self.dataframe = self.transformer.getDataFrame()
 
-    def getDataFrame(self):
-        if self.dataframe:
-            return self.dataframe
-        else:
+    def getDataFrame(self) -> DataFrame:
+        if self.dataframe is None:
             raise ValueError('Call read() before calling getDataFrame()')
+        return self.dataframe

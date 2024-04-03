@@ -25,18 +25,25 @@ class Visualization:
         self.y = y
         self.groupBy = groupBy
 
-    def show(self, callback: Callable = lambda _: None) -> None:
+    # pre is called before plotting the graph, while post is called
+    # after plotting the graph
+    def show(self, pre: Optional[Callable] = None,
+            post: Optional[Callable] = None) -> None:
         if not self.graph:
             raise ValueError("attribute 'graph' is None, please set it with setGraph(...).")
 
-        # only pass plt if callback has a parameter for it
-        paramAmount = len(inspect.signature(callback).parameters)
-        if paramAmount > 0:
-            callback(plt) # To allow the caller to optionally customize the plot
-        else:
-            callback() # To allow the caller to optionally customize the plot
+        if pre is not None:
+            # only pass plt if callback has a parameter for it
+            paramAmount = len(inspect.signature(pre).parameters)
+            if paramAmount > 0:
+                pre(plt)
+            else:
+                pre()
 
-        self.graph.plot()
+        if post is not None:
+            self.graph.plot(post)
+        else:
+            self.graph.plot()
 
     def setGraph(self, graphType: GraphType) -> None:
         if graphType == GraphType.BAR:
