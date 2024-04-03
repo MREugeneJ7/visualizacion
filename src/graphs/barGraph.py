@@ -10,25 +10,23 @@ import matplotlib.pyplot as plt
 from src.graphs.graph import Graph
 
 class BarGraph(Graph):
-    
-    def __init__(self, dataframe : DataFrame, y, title, groupBy,
-                xlabel: Optional[str] = None, ylabel: Optional[str] = None) -> None:
-        super().__init__(dataframe, y, title)
+
+    def __init__(self, dataframe : DataFrame, y, groupBy, title: str = None,
+                xlabel: str = None, ylabel: str = None) -> None:
+        super().__init__(dataframe, y)
         self._groupBy = groupBy
-        self.xlabel = xlabel
-        self.ylabel = ylabel
+        self.xlabel: Optional[str] = xlabel
+        self.ylabel: Optional[str] = ylabel
+        self.title: Optional[str] = title
 
     def plot(self) -> None:
         # creating the bar plot
         plt.bar(self._dataframe[self._groupBy], self._dataframe[self._y], color ='maroon', 
             width = 0.4)
-        plt.xlabel(self.xlabel)
-        plt.ylabel(self.ylabel)
-        plt.title(self._title)
+        if self.xlabel:
+            plt.xlabel(self.xlabel)
+        if self.ylabel:
+            plt.ylabel(self.ylabel)
+        if self.title:
+            plt.title(self._title)
         plt.show()
-
-    def setXLabel(self, xlabel: str) -> None:
-        self.xlabel = xlabel
-    
-    def setYLabel(self, ylabel: str) -> None:
-        self.ylabel = ylabel
