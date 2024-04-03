@@ -7,11 +7,11 @@ Visualization Assignment
 __authors__ = ["Marcos Barrios", "Eugenio Gonzalez"]
 __date__ = "2024/04/03"
 
-from dataframes.numeric_dataframe import NumericDataFrame
-from transformers.csvTransformer import CSVTransformer
-from visualizations.barGraph import BarGraph
+from src.dataframes_validation.numeric_dataframe import NumericDataFrame
+from src.transformers.csvTransformer import CSVTransformer
+from src.graphs.barGraph import BarGraph
 
-from visualization import Visualization
+from src.visualization import Visualization
 
 def main() -> None:
     csvTransformer = CSVTransformer('cost-of-living.csv')

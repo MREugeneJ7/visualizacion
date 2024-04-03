@@ -1,3 +1,7 @@
+'''
+  All graphs have this in common
+'''
+
 import abc
 
 class Graph(metaclass = abc.ABCMeta):

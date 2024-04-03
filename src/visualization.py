@@ -3,7 +3,7 @@ Represents a visualization and uses strategy pattern for choosing
 the specific graph to show.
 '''
 
-from visualizations.graph import Graph
+from src.graphs.graph import Graph
 
 class Visualization:
     

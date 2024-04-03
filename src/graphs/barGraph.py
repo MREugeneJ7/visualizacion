@@ -2,11 +2,12 @@
 Bar chart visualization
 '''
 
-from visualizations.graph import Graph
+from typing import Optional
+
 from pandas import DataFrame
 import matplotlib.pyplot as plt
 
-from typing import Optional
+from src.graphs.graph import Graph
 
 class BarGraph(Graph):
     

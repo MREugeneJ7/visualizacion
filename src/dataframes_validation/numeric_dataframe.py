@@ -1,5 +1,5 @@
 '''
-  Because visualizations require specific dataframes.
+  Because graph require specific dataframes.
   For example, if a visualization is meant for continuous data,
   then a dataframe with strings would not be valid.
 '''

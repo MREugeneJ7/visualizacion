@@ -6,7 +6,7 @@
 import pandas as pd
 from pandas import DataFrame
 
-from transformers.transformer import SourceTransformer
+from src.transformers.transformer import SourceTransformer
 
 class CSVTransformer(SourceTransformer):
 
