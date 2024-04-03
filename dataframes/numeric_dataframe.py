@@ -7,12 +7,12 @@
 import pandas as pd
 from pandas import DataFrame
 
-# WIP
+class NumericDataFrame():
 
-class NumericDataframe():
-
-    def __init__(self, filePath: str) -> None:
-        self.data = pd.read_csv(filePath)
+    def __init__(self, dataframe: DataFrame) -> None:
+        for columnName, series in dataframe.items():
+            pd.to_numeric(series, errors='raise')
+        self.dataframe = dataframe
 
     def get(self) -> DataFrame:
-        return self.data
+        return self.dataframe

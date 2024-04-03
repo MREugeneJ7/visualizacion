@@ -6,12 +6,12 @@
 import pandas as pd
 from pandas import DataFrame
 
-from transformer import SourceTransformer
+from transformers.transformer import SourceTransformer
 
 class CSVTransformer(SourceTransformer):
 
     def __init__(self, filePath: str) -> None:
         self.data = pd.read_csv(filePath)
 
-    def get(self) -> DataFrame:
+    def getDataFrame(self) -> DataFrame:
         return self.data

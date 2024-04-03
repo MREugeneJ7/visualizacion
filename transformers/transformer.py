@@ -11,5 +11,5 @@ class SourceTransformer:
         pass
 
     @abc.abstractmethod
-    def get(self) -> DataFrame:
+    def getDataFrame(self) -> DataFrame:
         pass
