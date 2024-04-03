@@ -7,14 +7,14 @@ Visualization Assignment
 __authors__ = ["Marcos Barrios", "Eugenio Gonzalez"]
 __date__ = "2024/04/03"
 
-from src.transformers.csvTransformer import CSVTransformer
-from src.transformers.transformer import SourceTransformer
 from src.visualization import Visualization
 from src.visualization import GraphType
+from src.reader import Reader
 
 def main() -> None:
-    csvTransformer: SourceTransformer = CSVTransformer('cost-of-living.csv')
-    dataframe = csvTransformer.getDataFrame()
+    reader = Reader('cost-of-living.csv')
+    reader.read()
+    dataframe = reader.getDataFrame()
     visualization = Visualization(dataframe.head(), y='x1', groupBy='city')
     visualization.setGraph(GraphType.BAR)
     visualization.show()

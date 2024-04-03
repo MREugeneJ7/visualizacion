@@ -16,3 +16,6 @@ class BarGraphTestCase(unittest.TestCase):
         def extraConfig(plt):
             plt.xlabel('tw')
         barGraph.plot(extraConfig)
+
+if __name__ == '__main__':
+    unittest.main()
