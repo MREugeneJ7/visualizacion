@@ -16,17 +16,16 @@ class Reader:
             raise OSError('Invalid file path passed to Reader.')
         if not os.path.isfile(filePath):
             raise OSError('Path passed is not a file')
-        self.filePath: str = filePath
-        self.transformer: Optional[SourceTransformer] = None
-        self.dataframe: Optional[DataFrame] = None
+        self._filePath: str = filePath
 
-    def read(self) -> None:
-        _, fileExtension = os.path.splitext(self.filePath)
+        self._dataframe: Optional[DataFrame] = None
+
+        _, fileExtension = os.path.splitext(self._filePath)
         if fileExtension == '.csv':
-            self.transformer: Optional[SourceTransformer] = CSVTransformer(self.filePath)
-            self.dataframe = self.transformer.getDataFrame()
+            transformer: SourceTransformer = CSVTransformer(self._filePath)
+            self._dataframe: Optional[DataFrame] = transformer.getDataFrame()
 
     def getDataFrame(self) -> DataFrame:
-        if self.dataframe is None:
+        if self._dataframe is None:
             raise ValueError('Call read() before calling getDataFrame()')
-        return self.dataframe
+        return self._dataframe

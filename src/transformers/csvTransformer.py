@@ -11,7 +11,7 @@ from src.transformers.transformer import SourceTransformer
 class CSVTransformer(SourceTransformer):
 
     def __init__(self, filePath: str) -> None:
-        self.data = pd.read_csv(filePath)
+        self._data = pd.read_csv(filePath)
 
     def getDataFrame(self) -> DataFrame:
-        return self.data
+        return self._data
