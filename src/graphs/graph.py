@@ -3,6 +3,7 @@
 '''
 
 from typing import Optional
+from collections.abc import Callable
 
 import abc
 
@@ -14,5 +15,5 @@ class Graph(metaclass = abc.ABCMeta):
         self._title: Optional[str] = title
 
     @abc.abstractmethod
-    def plot() -> None:
+    def plot(callback: Optional[Callable] = None) -> None:
         pass
