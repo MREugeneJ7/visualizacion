@@ -31,7 +31,7 @@ def main() -> None:
     def applyExtraConfig(plt):
         plt.xlabel('País')
         plt.ylabel('Coste')
-        plt.xticks(rotation=60, ha='right', fontsize=6)
+        plt.xticks(rotation=60, ha='right', fontsize=8)
     visualization.show(post=applyExtraConfig)
 
 if __name__ == '__main__':
