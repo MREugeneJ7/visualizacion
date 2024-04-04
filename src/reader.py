@@ -17,14 +17,13 @@ class Reader:
         if not os.path.isfile(filePath):
             raise OSError('Path passed is not a file')
         self._filePath: str = filePath
-        self._transformer: Optional[SourceTransformer] = None
+
         self._dataframe: Optional[DataFrame] = None
 
-    def read(self) -> None:
         _, fileExtension = os.path.splitext(self._filePath)
         if fileExtension == '.csv':
-            self._transformer: Optional[SourceTransformer] = CSVTransformer(self._filePath)
-            self._dataframe = self._transformer.getDataFrame()
+            transformer: SourceTransformer = CSVTransformer(self._filePath)
+            self._dataframe: Optional[DataFrame] = transformer.getDataFrame()
 
     def getDataFrame(self) -> DataFrame:
         if self._dataframe is None:

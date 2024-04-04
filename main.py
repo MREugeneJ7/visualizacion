@@ -13,7 +13,6 @@ from src.reader import Reader
 
 def main() -> None:
     reader = Reader('cost-of-living.csv')
-    reader.read()
     dataframe = reader.getDataFrame()
     visualization = Visualization(dataframe.head(), y='x1', groupBy='city', title='Test')
     visualization.setGraph(GraphType.BAR)
