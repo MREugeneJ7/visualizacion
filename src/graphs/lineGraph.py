@@ -1,5 +1,5 @@
 '''
-Bar chart visualization
+Line chart visualization
 '''
 
 import inspect
@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 from src.graphs.graph import Graph
 
-class BarGraph(Graph):
+class LineGraph(Graph):
 
     def __init__(self, dataframe : DataFrame, y, groupBy, title: str,
                 xlabel: Optional[str] = None, ylabel: Optional[str] = None) -> None:
@@ -22,16 +22,13 @@ class BarGraph(Graph):
         self._title: str = title
 
     def plot(self, callback: Optional[Callable] = None) -> None:
-        # creating the bar plot
-        plt.bar(self._dataframe[self._groupBy], self._dataframe[self._y], color ='maroon', 
-            width = 0.4)
+        # creating the line plot
+        plt.plot(self._dataframe[self._groupBy], self._dataframe[self._y], color ='maroon')
         plt.title(self._title)
         if self._xlabel is not None:
             plt.xlabel(self._xlabel)
         if self._ylabel is not None:
             plt.ylabel(self._ylabel)
-        if self._title is not None:
-            plt.title(self._title)
 
         if callback is not None:
             # only pass plt if callback has a parameter for it
