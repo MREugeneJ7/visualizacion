@@ -8,6 +8,7 @@ from collections.abc import Callable
 
 from pandas import DataFrame
 import matplotlib.pyplot as plt
+import numpy as np
 
 from src.graphs.graph import Graph
 
@@ -20,25 +21,42 @@ class BarGraph(Graph):
         self._xlabel: Optional[str] = xlabel
         self._ylabel: Optional[str] = ylabel
         self._title: str = title
+        self._fig, self._ax = plt.subplots(layout='constrained')
 
     def plot(self, callback: Optional[Callable] = None) -> None:
-        # creating the bar plot
-        plt.bar(self._dataframe[self._groupBy], self._dataframe[self._y], color ='maroon', 
-            width = 0.4)
-        plt.title(self._title)
+        # Because I want to accept any object that has [] operator implemented
+        if hasattr(self._y, '__iter__') and hasattr(self._y, '__getitem__'):
+            self._barMultigroup()
+        else: 
+            self._ax.bar(self._dataframe[self._groupBy], self._dataframe[self._y],
+                    color ='maroon', width = 0.4)
+        self._ax.set_title(self._title)
         if self._xlabel is not None:
-            plt.xlabel(self._xlabel)
+            self._ax.set_xlabel(self._xlabel)
         if self._ylabel is not None:
-            plt.ylabel(self._ylabel)
-        if self._title is not None:
-            plt.title(self._title)
+            self._ax.set_ylabel(self._ylabel)
 
         if callback is not None:
             # only pass plt if callback has a parameter for it
             paramAmount = len(inspect.signature(callback).parameters)
             if paramAmount > 0:
-                callback(plt) # To allow the caller to optionally customize the plot
+                # To allow the caller to optionally customize the plot
+                callback(self._fig, self._ax)
             else:
                 callback() # To allow the caller to optionally customize the plot
 
         plt.show()
+
+    def _barMultigroup(self):
+        x = np.arange(len(self._dataframe[self._groupBy]))
+
+        width = 0.4
+        multiplier = 0
+        for y in self._y:
+            offset = width * multiplier
+            rects = self._ax.bar(x + offset, self._dataframe[y], width,
+                                    color='blue', label=y)
+            # self._ax.bar_label(rects, padding=3)
+            multiplier += 1
+
+        self._ax.set_xticks(x + width, self._dataframe[self._groupBy], minor=True)
