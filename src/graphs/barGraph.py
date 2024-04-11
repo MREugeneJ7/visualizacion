@@ -50,13 +50,14 @@ class BarGraph(Graph):
     def _barMultigroup(self):
         x = np.arange(len(self._dataframe[self._groupBy]))
 
-        width = 0.4
+        width = 0.40
         multiplier = 0
         for y in self._y:
             offset = width * multiplier
             rects = self._ax.bar(x + offset, self._dataframe[y], width,
                                     color='blue', label=y)
-            # self._ax.bar_label(rects, padding=3)
             multiplier += 1
 
-        self._ax.set_xticks(x + width, self._dataframe[self._groupBy], minor=True)
+        self._ax.set_xticks(x + width, self._dataframe[self._groupBy])
+        self._ax.set_xticklabels(self._dataframe[self._groupBy], rotation=75,
+                                 ha='right', fontsize='small')

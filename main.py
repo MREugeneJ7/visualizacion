@@ -20,13 +20,15 @@ def main() -> None:
     dataframe = reader.getDataFrame()
 
     # calculate top 20 countries with the most expensive economic type food
-    topGroups: pd.Series[np.float64] = dataframe.groupby('country')['x1'].max().nlargest(20)
-    dataframeTopCountries = dataframe[dataframe['country'].isin(topGroups.index)]
-    dataframeTopCountriesSorted = dataframeTopCountries.sort_values(by=['x1','x2'],
-                                                                    ascending=False)
+    topX1: pd.Series[np.float64] = dataframe.groupby('country')['x1'].transform('max')
+    dataframeWithOnlyTopCountries = (
+        dataframe[dataframe['x1'] == topX1]
+        .drop_duplicates(subset=['country', 'x1'])
+        .nlargest(20, 'x1')
+    )
 
     print('Visualising the result.')
-    visualization = Visualization(dataframeTopCountriesSorted, y=['x1','x2'],
+    visualization = Visualization(dataframeWithOnlyTopCountries, y=['x1','x2'],
                                   groupBy='country',
                                   title='Coste de comida económica por país')
     visualization.setGraph(GraphType.BAR)
