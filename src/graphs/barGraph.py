@@ -8,6 +8,7 @@ from collections.abc import Callable
 
 from pandas import DataFrame
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 import numpy as np
 
 from src.graphs.graph import Graph
@@ -50,12 +51,14 @@ class BarGraph(Graph):
     def _barMultigroup(self):
         x = np.arange(len(self._dataframe[self._groupBy]))
 
+        colorMap = cm.get_cmap('tab10')
+
         width = 0.40
         multiplier = 0
-        for y in self._y:
+        for index, y in enumerate(self._y):
             offset = width * multiplier
             rects = self._ax.bar(x + offset, self._dataframe[y], width,
-                                    color='blue', label=y)
+                                    color=colorMap(index % len(self._y)), label=y)
             multiplier += 1
 
         self._ax.set_xticks(x + width, self._dataframe[self._groupBy])
