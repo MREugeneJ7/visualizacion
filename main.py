@@ -31,7 +31,7 @@ def main() -> None:
     visualization = Visualization(dataframeWithOnlyTopCountries, y=['x1','x2'],
                                   groupBy='country',
                                   title='Coste de comida económica por país')
-    visualization.setGraph(GraphType.LINE)
+    visualization.setGraph(GraphType.SCATTER)
     def applyExtraConfig(_, ax):
         ax.set_xlabel('País')
         ax.set_ylabel('Coste')
