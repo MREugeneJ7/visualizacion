@@ -15,11 +15,13 @@ from src.graphs.graph import Graph
 from src.graphs.barGraph import BarGraph
 from src.graphs.lineGraph import LineGraph
 from src.graphs.scatterGraph import ScatterGraph
+from src.graphs.histogramGraph import HistogramGraph
 
 class GraphType(Enum):
     BAR = 0,
     LINE = 1,
     SCATTER = 2,
+    HISTOGRAM = 3,
 
 class Visualization:
 
@@ -57,3 +59,5 @@ class Visualization:
             self._graph = LineGraph(self._dataframe, self._y, self._groupBy, self._title)
         if graphType == GraphType.SCATTER:
             self._graph = ScatterGraph(self._dataframe, self._y, self._groupBy, self._title)
+        if graphType == GraphType.HISTOGRAM:
+            self._graph = HistogramGraph(self._dataframe, self._y, self._groupBy, self._title)

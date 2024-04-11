@@ -55,8 +55,8 @@ class LineGraph(Graph):
 
         multiplier = 0
         for index, y in enumerate(self._y):
-            rects = self._ax.plot(x, self._dataframe[y],
-                                    color=colorMap(index % len(self._y)), label=y)
+            self._ax.plot(x, self._dataframe[y],
+                          color=colorMap(index % len(self._y)), label=y)
 
         self._ax.set_xticks(x, self._dataframe[self._groupBy])
         self._ax.set_xticklabels(self._dataframe[self._groupBy], rotation=75,

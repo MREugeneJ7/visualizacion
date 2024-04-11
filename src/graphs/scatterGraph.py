@@ -57,7 +57,7 @@ class ScatterGraph(Graph):
         multiplier = 0
         for index, y in enumerate(self._y):
             offset = width * multiplier
-            rects = self._ax.scatter(x + offset, self._dataframe[y], 100,
+            self._ax.scatter(x + offset, self._dataframe[y], s=100,
                                     color=colorMap(index % len(self._y)), label=y)
             multiplier += 1
 
