@@ -4,6 +4,8 @@ Bar chart visualization
 
 import inspect
 from typing import Optional
+from typing import Any
+from typing import Iterable
 from collections.abc import Callable
 
 from pandas import DataFrame
@@ -13,11 +15,16 @@ import numpy as np
 
 from src.graphs.graph import Graph
 
-class BarGraph(Graph):
+class HistogramGraph(Graph):
 
-    def __init__(self, dataframe : DataFrame, y, groupBy, title: str,
-                xlabel: Optional[str] = None, ylabel: Optional[str] = None) -> None:
+    def __init__(self, dataframe : DataFrame, y, groupBy: Optional[Iterable],
+                 title: str, xlabel: Optional[str] = None,
+                 ylabel: Optional[str] = None) -> None:
         super().__init__(dataframe, y)
+        for i in range(1, len(groupBy)):
+            if groupBy[i] < groupBy[i - 1]:
+                raise ValueError('Histogram graph received a non iterable' +
+                                 ' groupBy argument.')
         self._groupBy = groupBy
         self._xlabel: Optional[str] = xlabel
         self._ylabel: Optional[str] = ylabel
@@ -27,9 +34,9 @@ class BarGraph(Graph):
     def plot(self, callback: Optional[Callable] = None) -> None:
         # Because I want to accept any object that has [] operator implemented
         if hasattr(self._y, '__iter__') and hasattr(self._y, '__getitem__'):
-            self._barMultigroup()
+            self._scatterMultigroup()
         else: 
-            self._ax.bar(self._dataframe[self._groupBy], self._dataframe[self._y],
+            self._ax.hist(self._dataframe[self._groupBy], self._dataframe[self._y],
                     color ='blue', width = 0.4)
         self._ax.set_title(self._title)
         if self._xlabel is not None:
@@ -48,20 +55,14 @@ class BarGraph(Graph):
 
         plt.show()
 
-    def _barMultigroup(self):
-        x = np.arange(len(self._dataframe[self._groupBy]))
-
+    def _scatterMultigroup(self):
         colorMap = cm.get_cmap('tab10')
 
-        width = 0.40
-        multiplier = 0
         for index, y in enumerate(self._y):
-            offset = width * multiplier
-            self._ax.bar(x + offset, self._dataframe[y], width,
-                         color=colorMap(index % len(self._y)), label=y)
-            multiplier += 1
+            self._ax.hist(self._dataframe[y], bins=self._groupBy,
+                          color=colorMap(index % len(self._y)), label=y,
+                          alpha=0.5)
 
-        self._ax.set_xticks(x + width, self._dataframe[self._groupBy])
-        self._ax.set_xticklabels(self._dataframe[self._groupBy], rotation=75,
-                                 ha='right', fontsize='small')
+        # self._ax.set_xticklabels(self._dataframe[self._groupBy], rotation=75,
+                                #  ha='right', fontsize='small')
         self._ax.legend(self._y)

@@ -13,7 +13,7 @@ import numpy as np
 
 from src.graphs.graph import Graph
 
-class BarGraph(Graph):
+class ScatterGraph(Graph):
 
     def __init__(self, dataframe : DataFrame, y, groupBy, title: str,
                 xlabel: Optional[str] = None, ylabel: Optional[str] = None) -> None:
@@ -27,9 +27,9 @@ class BarGraph(Graph):
     def plot(self, callback: Optional[Callable] = None) -> None:
         # Because I want to accept any object that has [] operator implemented
         if hasattr(self._y, '__iter__') and hasattr(self._y, '__getitem__'):
-            self._barMultigroup()
+            self._scatterMultigroup()
         else: 
-            self._ax.bar(self._dataframe[self._groupBy], self._dataframe[self._y],
+            self._ax.scatter(self._dataframe[self._groupBy], self._dataframe[self._y],
                     color ='blue', width = 0.4)
         self._ax.set_title(self._title)
         if self._xlabel is not None:
@@ -48,7 +48,7 @@ class BarGraph(Graph):
 
         plt.show()
 
-    def _barMultigroup(self):
+    def _scatterMultigroup(self):
         x = np.arange(len(self._dataframe[self._groupBy]))
 
         colorMap = cm.get_cmap('tab10')
@@ -57,8 +57,8 @@ class BarGraph(Graph):
         multiplier = 0
         for index, y in enumerate(self._y):
             offset = width * multiplier
-            self._ax.bar(x + offset, self._dataframe[y], width,
-                         color=colorMap(index % len(self._y)), label=y)
+            self._ax.scatter(x + offset, self._dataframe[y], s=100,
+                                    color=colorMap(index % len(self._y)), label=y)
             multiplier += 1
 
         self._ax.set_xticks(x + width, self._dataframe[self._groupBy])
