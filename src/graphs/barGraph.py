@@ -30,7 +30,7 @@ class BarGraph(Graph):
             self._barMultigroup()
         else: 
             self._ax.bar(self._dataframe[self._groupBy], self._dataframe[self._y],
-                    color ='maroon', width = 0.4)
+                    color ='blue', width = 0.4)
         self._ax.set_title(self._title)
         if self._xlabel is not None:
             self._ax.set_xlabel(self._xlabel)
