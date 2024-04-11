@@ -64,3 +64,4 @@ class BarGraph(Graph):
         self._ax.set_xticks(x + width, self._dataframe[self._groupBy])
         self._ax.set_xticklabels(self._dataframe[self._groupBy], rotation=75,
                                  ha='right', fontsize='small')
+        self._ax.legend(self._y)
