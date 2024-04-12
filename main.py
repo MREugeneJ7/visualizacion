@@ -40,17 +40,25 @@ def _drawTopCountry() -> None:
     visualization.show(post=applyExtraConfig)
 
 def main() -> None:
-    # _drawTopCountry()
+    #_drawTopCountry()
 
-    histogramDataframe = pd.DataFrame({
-        "y": [2,3,4,2,3,4,2,3,3,2,2,2,2,2,3],
-        "y2": [4,4,4,3,3,2,None,None,None,None,None,None,None,None,None,]
-    })
-    visualization2 = Visualization(histogramDataframe, y=['y','y2'],
-                                groupBy=[-1,0, 1, 2, 3, 4, 5, 6], # the bins
-                                title='Coste de comida económica por país')
-    visualization2.setGraph(GraphType.HISTOGRAM)
-    visualization2.show()
+    readerDf1 = Reader("cost-of-living_v2.csv", dropna = True)
+    dataframeGCL = readerDf1.getDataFrame()
+    readerDf2 = Reader("GDP.csv", 2)
+    dataframeGDP = readerDf2.getDataFrame()
+
+    subset = dataframeGCL[["country", "x1", "x28", "x49"]]
+    subsetByCountry = subset.groupby("country").mean()
+
+    newCol = map(lambda x : x[0] * 365 + x[1] * 365 + x[2] * 12 ,subsetByCountry.values)
+    subsetByCountry["fuckingaggregateofhell"] = list(newCol)
+
+    superjoin = dataframeGDP.join(subsetByCountry, on="Country Name")
+
+    #TODO: Get last year with GDP, get only interesting columns, create scattershit, 
+    #refactor all dataframe things into a UtilityClass/Wrapper
+
+    print(superjoin)
 
 if __name__ == '__main__':
     main()

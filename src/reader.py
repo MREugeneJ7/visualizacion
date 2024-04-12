@@ -12,7 +12,7 @@ from src.transformers.csvTransformer import CSVTransformer
 
 class Reader:
 
-    def __init__(self, filePath: str) -> None: 
+    def __init__(self, filePath: str, header: Optional[int] = 0, dropna: Optional[bool] = False) -> None: 
         if not os.path.exists(filePath):
             raise OSError('Invalid file path passed to Reader.')
         if not os.path.isfile(filePath):
@@ -23,7 +23,7 @@ class Reader:
 
         _, fileExtension = os.path.splitext(self._filePath)
         if fileExtension == '.csv':
-            transformer: SourceTransformer = CSVTransformer(self._filePath)
+            transformer: SourceTransformer = CSVTransformer(self._filePath, header, dropna)
             self._dataframe: Optional[DataFrame] = transformer.getDataFrame()
 
     def getDataFrame(self) -> DataFrame:
