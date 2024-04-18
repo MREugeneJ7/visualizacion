@@ -40,7 +40,7 @@ def _drawTopCountry() -> None:
     visualization.show(post=applyExtraConfig)
 
 def main() -> None:
-    #_drawTopCountry()
+    # _drawTopCountry()
 
     readerDf1 = Reader("cost-of-living_v2.csv", dropna = True)
     dataframeGCL = readerDf1.getDataFrame()
@@ -55,10 +55,18 @@ def main() -> None:
 
     superjoin = dataframeGDP.join(subsetByCountry, on="Country Name")
 
-    #TODO: Get last year with GDP, get only interesting columns, create scattershit, 
-    #refactor all dataframe things into a UtilityClass/Wrapper
+    # Get x1, x28, x49, 2022
+    onlyInterestingColumns = (superjoin[['Country Name', 'fuckingaggregateofhell',
+                                          '2022']].dropna())
 
-    print(superjoin)
+    visualization = Visualization(onlyInterestingColumns, y=['fuckingaggregateofhell', '2022'],
+                                  groupBy='Country Name', title='GDP each year per country')
+    visualization.setGraph(GraphType.SCATTER)
+    visualization.show()
+
+    # TODO:
+    # Change representation to better visualize GDP.
+    # Refactor all dataframe things into a UtilityClass/Wrapper
 
 if __name__ == '__main__':
     main()
