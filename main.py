@@ -13,6 +13,7 @@ import numpy as np
 from src.visualization import Visualization
 from src.visualization import GraphType
 from src.reader import Reader
+from src.util.dataframeUtil import groupByAggreate, subset as ss
 
 def _drawTopCountry() -> None:
     print('Reading csv file.')
@@ -47,8 +48,8 @@ def main() -> None:
     readerDf2 = Reader("GDP.csv", 2)
     dataframeGDP = readerDf2.getDataFrame()
 
-    subset = dataframeGCL[["country", "x1", "x28", "x49"]]
-    subsetByCountry = subset.groupby("country").mean()
+    subset = ss(dataframeGCL, "country", "x1", "x28", "x49")
+    subsetByCountry = groupByAggreate(subset,"country", "mean")
 
     newCol = map(lambda x : x[0] * 365 + x[1] * 365 + x[2] * 12 ,subsetByCountry.values)
     subsetByCountry["fuckingaggregateofhell"] = list(newCol)
