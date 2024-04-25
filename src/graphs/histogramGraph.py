@@ -1,17 +1,15 @@
 '''
-Bar chart visualization
+Histogram chart visualization
 '''
 
 import inspect
 from typing import Optional
-from typing import Any
 from typing import Iterable
 from collections.abc import Callable
 
 from pandas import DataFrame
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-import numpy as np
 
 from src.graphs.graph import Graph
 

@@ -40,6 +40,14 @@ def _drawTopCountry() -> None:
         ax.xaxis.set_tick_params(labelrotation=60, length=8)
     visualization.show(post=applyExtraConfig)
 
+# WIP, I am gonna make the GPD-artificial_total scatter
+def _showViolinGraph(dataframe) -> None:
+    visualization = Visualization(dataframe.head(), y='x1',
+                                  groupBy='Country Name', title='Approx. living cost')
+    visualization.setGraph(GraphType.VIOLIN)
+    visualization.show()
+
+
 def main() -> None:
     # _drawTopCountry()
 
@@ -52,22 +60,25 @@ def main() -> None:
     subsetByCountry = groupByAggreate(subset,"country", "mean")
 
     newCol = map(lambda x : x[0] * 365 + x[1] * 365 + x[2] * 12 ,subsetByCountry.values)
-    subsetByCountry["fuckingaggregateofhell"] = list(newCol)
+    subsetByCountry["artificial_total"] = list(newCol)
 
     superjoin = dataframeGDP.join(subsetByCountry, on="Country Name")
 
     # Get x1, x28, x49, 2022
-    onlyInterestingColumns = (superjoin[['Country Name', 'fuckingaggregateofhell',
+    onlyInterestingColumns = (superjoin[['Country Name', 'artificial_total',
                                           '2022']].dropna())
 
-    visualization = Visualization(onlyInterestingColumns, y=['fuckingaggregateofhell', '2022'],
-                                  groupBy='Country Name', title='GDP each year per country')
+    visualization = Visualization(onlyInterestingColumns, y='artificial_total',
+                                  groupBy='2022', title='GDP per country ' +
+                                  'vs approx. living cost')
     visualization.setGraph(GraphType.SCATTER)
     visualization.show()
 
     # TODO:
     # Change representation to better visualize GDP.
     # Refactor all dataframe things into a UtilityClass/Wrapper
+
+    # _showViolinGraph(dataframeGDP)
 
 if __name__ == '__main__':
     main()

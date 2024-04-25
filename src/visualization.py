@@ -11,19 +11,21 @@ from collections.abc import Callable
 from pandas import DataFrame
 import matplotlib.pyplot as plt
 
-from graphs.machinelearning.decisionTreeGraph import DecissionTreeGraph
+from src.graphs.machinelearning.decisionTreeGraph import DecissionTreeGraph
 from src.graphs.graph import Graph
 from src.graphs.barGraph import BarGraph
 from src.graphs.lineGraph import LineGraph
 from src.graphs.scatterGraph import ScatterGraph
 from src.graphs.histogramGraph import HistogramGraph
+from src.graphs.violinGraph import ViolinGraph
 
 class GraphType(Enum):
     BAR = 0,
     LINE = 1,
     SCATTER = 2,
     HISTOGRAM = 3,
-    DECISION_TREE = 4
+    DECISION_TREE = 4,
+    VIOLIN = 5,
 
 class Visualization:
 
@@ -56,12 +58,20 @@ class Visualization:
 
     def setGraph(self, graphType: GraphType) -> None:
         if graphType == GraphType.BAR:
-            self._graph = BarGraph(self._dataframe, self._y, self._groupBy, self._title)
+            self._graph = BarGraph(self._dataframe, self._y, self._groupBy,
+                                   self._title)
         if graphType == GraphType.LINE:
-            self._graph = LineGraph(self._dataframe, self._y, self._groupBy, self._title)
+            self._graph = LineGraph(self._dataframe, self._y, self._groupBy,
+                                    self._title)
         if graphType == GraphType.SCATTER:
-            self._graph = ScatterGraph(self._dataframe, self._y, self._groupBy, self._title)
+            self._graph = ScatterGraph(self._dataframe, self._y, self._groupBy,
+                                       self._title)
         if graphType == GraphType.HISTOGRAM:
-            self._graph = HistogramGraph(self._dataframe, self._y, self._groupBy, self._title)
+            self._graph = HistogramGraph(self._dataframe, self._y, self._groupBy,
+                                         self._title)
         if graphType == GraphType.DECISION_TREE:
-            self._graph = DecissionTreeGraph(self._dataframe, self._y, self._title)
+            self._graph = DecissionTreeGraph(self._dataframe, self._y,
+                                             self._title)
+        if graphType == GraphType.VIOLIN:
+            self._graph = ViolinGraph(self._dataframe, self._y, self._groupBy,
+                                      self._title)

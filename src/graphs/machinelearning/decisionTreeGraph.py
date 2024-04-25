@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
 from pandas import DataFrame
 from sklearn import tree
-from graphs.graph import Graph
+from src.graphs.graph import Graph
 
 
 class DecissionTreeGraph(Graph):
