@@ -11,7 +11,8 @@ from collections.abc import Callable
 from pandas import DataFrame
 import matplotlib.pyplot as plt
 
-from graphs.machinelearning.decisionTreeGraph import DecissionTreeGraph
+from src.graphs.machinelearning.decisionTreeGraph import DecissionTreeGraph
+from src.graphs.maps.worldMapGraph import WorldMapGraph
 from src.graphs.graph import Graph
 from src.graphs.barGraph import BarGraph
 from src.graphs.lineGraph import LineGraph
@@ -23,7 +24,8 @@ class GraphType(Enum):
     LINE = 1,
     SCATTER = 2,
     HISTOGRAM = 3,
-    DECISION_TREE = 4
+    DECISION_TREE = 4,
+    MAP = 5
 
 class Visualization:
 
@@ -65,3 +67,5 @@ class Visualization:
             self._graph = HistogramGraph(self._dataframe, self._y, self._groupBy, self._title)
         if graphType == GraphType.DECISION_TREE:
             self._graph = DecissionTreeGraph(self._dataframe, self._y, self._title)
+        if graphType == GraphType.MAP:
+            self._graph = WorldMapGraph(self._dataframe, self._y, self._title)
