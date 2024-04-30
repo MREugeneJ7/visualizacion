@@ -25,6 +25,11 @@ class ScatterGraph(Graph):
         self._fig, self._ax = plt.subplots(layout='constrained')
 
     def plot(self, callback: Optional[Callable] = None) -> None:
+        self.preplot(callback)
+
+        plt.show()
+
+    def preplot(self, callback: Optional[Callable]):
         # Because I want to accept any object that has [] operator implemented
         if hasattr(self._y, '__iter__') and hasattr(self._y, '__getitem__'):
             self._scatterMultigroup()
@@ -45,8 +50,6 @@ class ScatterGraph(Graph):
                 callback(self._fig, self._ax)
             else:
                 callback() # To allow the caller to optionally customize the plot
-
-        plt.show()
 
     def _scatterMultigroup(self):
         x = np.arange(len(self._dataframe[self._groupBy]))

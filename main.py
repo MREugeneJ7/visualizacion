@@ -62,18 +62,18 @@ def main() -> None:
     onlyInterestingColumns = (superjoin[['Country Name', 'fuckingaggregateofhell',
                                           '2022']].dropna())
 
-    visualization = Visualization(onlyInterestingColumns, y=['fuckingaggregateofhell', '2022'],
-                                  groupBy='Country Name', title='GDP each year per country')
-    visualization.setGraph(GraphType.SCATTER)
-    #visualization.show()
+    visualization = Visualization(onlyInterestingColumns, y=['fuckingaggregateofhell'],
+                                  groupBy='2022', title='GDP each year per country')
+    visualization.setGraph(GraphType.REGRESSION_SCATTER)
+    visualization.show()
 
 
-    gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
-                                 geometry = onlyInterestingColumns['Country Name'].map(lambda x : get_coordinates(x)), 
-                                 crs = "EPSG:4326")
-    visualization2 = Visualization(gdf, "2022", None, None)
-    visualization2.setGraph(GraphType.MAP)
-    visualization2.show()
+    #gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
+    #                             geometry = onlyInterestingColumns['Country Name'].map(lambda x : get_coordinates(x)), 
+    #                             crs = "EPSG:4326")
+    #visualization2 = Visualization(gdf, "2022", None, None)
+    #visualization2.setGraph(GraphType.MAP)
+    #visualization2.show()
     # TODO:
     # Change representation to better visualize GDP.
     # Refactor all dataframe things into a UtilityClass/Wrapper

@@ -11,6 +11,7 @@ from collections.abc import Callable
 from pandas import DataFrame
 import matplotlib.pyplot as plt
 
+from src.graphs.machinelearning.scatterWithRegression import ScatterWithRegressionGraph
 from src.graphs.machinelearning.decisionTreeGraph import DecissionTreeGraph
 from src.graphs.maps.worldMapGraph import WorldMapGraph
 from src.graphs.graph import Graph
@@ -25,7 +26,8 @@ class GraphType(Enum):
     SCATTER = 2,
     HISTOGRAM = 3,
     DECISION_TREE = 4,
-    MAP = 5
+    MAP = 5,
+    REGRESSION_SCATTER=6
 
 class Visualization:
 
@@ -69,3 +71,5 @@ class Visualization:
             self._graph = DecissionTreeGraph(self._dataframe, self._y, self._title)
         if graphType == GraphType.MAP:
             self._graph = WorldMapGraph(self._dataframe, self._y, self._title)
+        if graphType == GraphType.REGRESSION_SCATTER:
+            self._graph = ScatterWithRegressionGraph(self._dataframe, self._y, self._groupBy, self._title)
