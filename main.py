@@ -42,9 +42,16 @@ def _drawTopCountry() -> None:
 
 # WIP, I am gonna make the GPD-artificial_total scatter
 def _showViolinGraph(dataframe) -> None:
-    visualization = Visualization(dataframe.head(), y='x1',
-                                  groupBy='Country Name', title='Approx. living cost')
+    visualization = Visualization(dataframe, y='x1',
+                                  groupBy='country', title='Approx. living cost',
+                                  hue='country')
     visualization.setGraph(GraphType.VIOLIN)
+    visualization.show()
+
+def _showBoxplotGraph(dataframe) -> None:
+    visualization = Visualization(dataframe, y=['x1','x28'],
+                                  groupBy='country', title='Approx. living cost')
+    visualization.setGraph(GraphType.BOXPLOT)
     visualization.show()
 
 
@@ -64,21 +71,18 @@ def main() -> None:
 
     superjoin = dataframeGDP.join(subsetByCountry, on="Country Name")
 
-    # Get x1, x28, x49, 2022
-    onlyInterestingColumns = (superjoin[['Country Name', 'artificial_total',
-                                          '2022']].dropna())
+    # # Get x1, x28, x49, 2022
+    # onlyInterestingColumns = (superjoin[['Country Name', 'artificial_total',
+    #                                       '2022']].dropna())
 
-    visualization = Visualization(onlyInterestingColumns, y='artificial_total',
-                                  groupBy='2022', title='GDP per country ' +
-                                  'vs approx. living cost')
-    visualization.setGraph(GraphType.SCATTER)
-    visualization.show()
+    # visualization = Visualization(onlyInterestingColumns, y='artificial_total',
+    #                               groupBy='2022', title='GDP per country ' +
+    #                               'vs approx. living cost')
+    # visualization.setGraph(GraphType.SCATTER)
+    # visualization.show()
 
-    # TODO:
-    # Change representation to better visualize GDP.
-    # Refactor all dataframe things into a UtilityClass/Wrapper
-
-    # _showViolinGraph(dataframeGDP)
+    _showViolinGraph(subset.head(12))
+    # _showBoxplotGraph(subset.head(15))
 
 if __name__ == '__main__':
     main()

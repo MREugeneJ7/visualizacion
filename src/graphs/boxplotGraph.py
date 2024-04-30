@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 from src.graphs.graph import Graph
 
-class ViolinGraph(Graph):
+class BoxplotGraph(Graph):
 
     def __init__(self, dataframe : DataFrame, y : str | Iterable[str],
                  groupBy: Optional[Iterable], title: str,
@@ -28,16 +28,15 @@ class ViolinGraph(Graph):
 
     def plot(self, callback: Optional[Callable] = None) -> None:
         sns.set_theme()
-        g : sns.FacetGrid = sns.catplot(data=self._dataframe, kind='violin',
+        g : sns.FacetGrid = sns.boxplot(data=self._dataframe,
                                         x=self._groupBy, y=self._y,
-                                        hue=self._hue, split=True)
+                                        hue=self._hue)
 
         plt.title(self._title)
         if self._xlabel is not None:
             g.set_xlabel(self._xlabel)
         if self._ylabel is not None:
             g.set_ylabel(self._ylabel)
-
         plt.xticks(rotation=45, ha='right')
 
         if callback is not None:
