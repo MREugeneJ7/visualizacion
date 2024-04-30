@@ -13,7 +13,9 @@ import numpy as np
 from src.visualization import Visualization
 from src.visualization import GraphType
 from src.reader import Reader
+import geopandas
 from src.util.dataframeUtil import groupByAggreate, subset as ss
+from src.util.geographicUtils import get_coordinates
 
 def _drawTopCountry() -> None:
     print('Reading csv file.')
@@ -72,17 +74,28 @@ def main() -> None:
     superjoin = dataframeGDP.join(subsetByCountry, on="Country Name")
 
     # # Get x1, x28, x49, 2022
-    # onlyInterestingColumns = (superjoin[['Country Name', 'artificial_total',
-    #                                       '2022']].dropna())
+    onlyInterestingColumns = (superjoin[['Country Name', 'artificial_total',
+                                          '2022']].dropna())
 
-    # visualization = Visualization(onlyInterestingColumns, y='artificial_total',
-    #                               groupBy='2022', title='GDP per country ' +
-    #                               'vs approx. living cost')
-    # visualization.setGraph(GraphType.SCATTER)
-    # visualization.show()
+    visualization = Visualization(onlyInterestingColumns, y=['fuckingaggregateofhell', '2022'],
+                                  groupBy='Country Name', title='GDP each year per country')
+    visualization.setGraph(GraphType.SCATTER)
+    #visualization.show()
 
-    _showViolinGraph(subset.head(12))
+
+    gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
+                                 geometry = onlyInterestingColumns['Country Name'].map(lambda x : get_coordinates(x)), 
+                                 crs = "EPSG:4326")
+    visualization2 = Visualization(gdf, "2022", None, None)
+    visualization2.setGraph(GraphType.MAP)
+    visualization2.show()
+
+    # TODO:
+    # Change representation to better visualize GDP.
+    # Refactor all dataframe things into a UtilityClass/Wrapper
+
     # _showBoxplotGraph(subset.head(15))
+    # _showViolinGraph(subset.head(12))
 
 if __name__ == '__main__':
     main()

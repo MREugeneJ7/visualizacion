@@ -12,6 +12,8 @@ from pandas import DataFrame
 import matplotlib.pyplot as plt
 
 from src.graphs.machinelearning.decisionTreeGraph import DecissionTreeGraph
+
+from src.graphs.maps.worldMapGraph import WorldMapGraph
 from src.graphs.graph import Graph
 from src.graphs.barGraph import BarGraph
 from src.graphs.lineGraph import LineGraph
@@ -26,8 +28,9 @@ class GraphType(Enum):
     SCATTER = 2,
     HISTOGRAM = 3,
     DECISION_TREE = 4,
-    VIOLIN = 5,
-    BOXPLOT = 6,
+    MAP = 5
+    VIOLIN = 6,
+    BOXPLOT = 7,
 
 class Visualization:
 
@@ -79,7 +82,10 @@ class Visualization:
                                              self._title, **self._args)
         if graphType == GraphType.VIOLIN:
             self._graph = ViolinGraph(self._dataframe, self._y, self._groupBy,
-                                      self._title, **self._args)
+                                        self._title, **self._args)
         if graphType == GraphType.BOXPLOT:
             self._graph = BoxplotGraph(self._dataframe, self._y, self._groupBy,
-                                      self._title, **self._args)
+                                        self._title, **self._args)
+        if graphType == GraphType.MAP:
+            self._graph = WorldMapGraph(self._dataframe, self._y, self._title)
+
