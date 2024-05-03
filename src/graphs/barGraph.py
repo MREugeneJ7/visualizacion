@@ -16,13 +16,15 @@ from src.graphs.graph import Graph
 class BarGraph(Graph):
 
     def __init__(self, dataframe : DataFrame, y, groupBy, title: str,
-                xlabel: Optional[str] = None, ylabel: Optional[str] = None) -> None:
+                xlabel: Optional[str] = None, ylabel: Optional[str] = None,
+                **args) -> None:
         super().__init__(dataframe, y)
         self._groupBy = groupBy
         self._xlabel: Optional[str] = xlabel
         self._ylabel: Optional[str] = ylabel
         self._title: str = title
         self._fig, self._ax = plt.subplots(layout='constrained')
+        self._args = args
 
     def plot(self, callback: Optional[Callable] = None) -> None:
         # Because I want to accept any object that has [] operator implemented
@@ -30,7 +32,7 @@ class BarGraph(Graph):
             self._barMultigroup()
         else: 
             self._ax.bar(self._dataframe[self._groupBy], self._dataframe[self._y],
-                    color ='blue', width = 0.4)
+                    color ='blue', width = 0.4, **self._args)
         self._ax.set_title(self._title)
         if self._xlabel is not None:
             self._ax.set_xlabel(self._xlabel)
@@ -58,7 +60,7 @@ class BarGraph(Graph):
         for index, y in enumerate(self._y):
             offset = width * multiplier
             self._ax.bar(x + offset, self._dataframe[y], width,
-                         color=colorMap(index % len(self._y)), label=y)
+                         color=colorMap(index % len(self._y)), label=y, **self._args)
             multiplier += 1
 
         self._ax.set_xticks(x + width, self._dataframe[self._groupBy])

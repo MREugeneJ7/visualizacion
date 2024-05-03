@@ -17,7 +17,7 @@ class HistogramGraph(Graph):
 
     def __init__(self, dataframe : DataFrame, y, groupBy: Optional[Iterable],
                  title: str, xlabel: Optional[str] = None,
-                 ylabel: Optional[str] = None) -> None:
+                 ylabel: Optional[str] = None, **args) -> None:
         super().__init__(dataframe, y)
         for i in range(1, len(groupBy)):
             if groupBy[i] < groupBy[i - 1]:
@@ -28,6 +28,7 @@ class HistogramGraph(Graph):
         self._ylabel: Optional[str] = ylabel
         self._title: str = title
         self._fig, self._ax = plt.subplots(layout='constrained')
+        self._args = args
 
     def plot(self, callback: Optional[Callable] = None) -> None:
         # Because I want to accept any object that has [] operator implemented
@@ -35,7 +36,7 @@ class HistogramGraph(Graph):
             self._scatterMultigroup()
         else: 
             self._ax.hist(self._dataframe[self._groupBy], self._dataframe[self._y],
-                    color ='blue', width = 0.4)
+                    color ='blue', width = 0.4, **self._args)
         self._ax.set_title(self._title)
         if self._xlabel is not None:
             self._ax.set_xlabel(self._xlabel)
@@ -59,7 +60,7 @@ class HistogramGraph(Graph):
         for index, y in enumerate(self._y):
             self._ax.hist(self._dataframe[y], bins=self._groupBy,
                           color=colorMap(index % len(self._y)), label=y,
-                          alpha=0.5)
+                          alpha=0.5, **self._args)
 
         # self._ax.set_xticklabels(self._dataframe[self._groupBy], rotation=75,
                                 #  ha='right', fontsize='small')

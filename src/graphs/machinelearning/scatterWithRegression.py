@@ -12,8 +12,9 @@ from src.graphs.scatterGraph import ScatterGraph
 class ScatterWithRegressionGraph(ScatterGraph):
 
     def __init__(self, dataframe : DataFrame, y, groupBy, title: str,
-                xlabel: Optional[str] = None, ylabel: Optional[str] = None) -> None:
-        super().__init__(dataframe, y, groupBy, title, xlabel, ylabel)
+                xlabel: Optional[str] = None, ylabel: Optional[str] = None,
+                **args) -> None:
+        super().__init__(dataframe, y, groupBy, title, xlabel, ylabel, **args)
         self._regression_x, self._predicted_y = self.predict_y()
 
     def predict_y(self):
@@ -24,9 +25,10 @@ class ScatterWithRegressionGraph(ScatterGraph):
     
     def plot(self, callback: Callable[..., Any] | None = None) -> None:
         super().preplot(callback)
-        self._ax.plot(self._regression_x, self._predicted_y, color="blue", linewidth=3)
+        self._ax.plot(self._regression_x, self._predicted_y, color="blue",
+                      linewidth=3, **self._args)
 
-        plt.xticks(())
-        plt.yticks(())
+        # plt.xticks(())
+        # plt.yticks(())
 
         plt.savefig("a.png")

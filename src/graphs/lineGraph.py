@@ -16,20 +16,23 @@ from src.graphs.graph import Graph
 class LineGraph(Graph):
 
     def __init__(self, dataframe : DataFrame, y, groupBy, title: str,
-                xlabel: Optional[str] = None, ylabel: Optional[str] = None) -> None:
+                xlabel: Optional[str] = None, ylabel: Optional[str] = None,
+                **args) -> None:
         super().__init__(dataframe, y)
         self._groupBy = groupBy
         self._xlabel: Optional[str] = xlabel
         self._ylabel: Optional[str] = ylabel
         self._title: str = title
         self._fig, self._ax = plt.subplots(layout='constrained')
+        self._args = args
 
     def plot(self, callback: Optional[Callable] = None) -> None:
         # creating the line plot
         if hasattr(self._y, '__iter__') and hasattr(self._y, '__getitem__'):
             self._lineMultigroup()
         else: 
-            self._ax.plot(self._dataframe[self._groupBy], self._dataframe[self._y])
+            self._ax.plot(self._dataframe[self._groupBy],
+                          self._dataframe[self._y], **self._args)
 
         self._ax.set_title(self._title)
         if self._xlabel is not None:
@@ -56,7 +59,8 @@ class LineGraph(Graph):
         multiplier = 0
         for index, y in enumerate(self._y):
             self._ax.plot(x, self._dataframe[y],
-                          color=colorMap(index % len(self._y)), label=y)
+                          color=colorMap(index % len(self._y)), label=y,
+                          **self._args)
 
         self._ax.set_xticks(x, self._dataframe[self._groupBy])
         self._ax.set_xticklabels(self._dataframe[self._groupBy], rotation=75,

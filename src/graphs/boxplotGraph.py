@@ -18,19 +18,20 @@ class BoxplotGraph(Graph):
     def __init__(self, dataframe : DataFrame, y : str | Iterable[str],
                  groupBy: Optional[Iterable], title: str,
                  hue: str | Iterable[str] = None, xlabel: Optional[str] = None,
-                 ylabel: Optional[str] = None) -> None:
+                 ylabel: Optional[str] = None, **args) -> None:
         super().__init__(dataframe, y)
         self._groupBy : Optional[Iterable] = groupBy
         self._xlabel: Optional[str] = xlabel
         self._ylabel: Optional[str] = ylabel
         self._title: str = title
         self._hue : str | Iterable[str] = hue
+        self._args = args
 
     def plot(self, callback: Optional[Callable] = None) -> None:
         sns.set_theme()
         g : sns.FacetGrid = sns.boxplot(data=self._dataframe,
                                         x=self._groupBy, y=self._y,
-                                        hue=self._hue)
+                                        hue=self._hue, **self._args)
 
         plt.title(self._title)
         if self._xlabel is not None:

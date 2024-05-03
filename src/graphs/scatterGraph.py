@@ -17,13 +17,15 @@ from src.graphs.graph import Graph
 class ScatterGraph(Graph):
 
     def __init__(self, dataframe : DataFrame, y, groupBy, title: str,
-                xlabel: Optional[str] = None, ylabel: Optional[str] = None) -> None:
+                xlabel: Optional[str] = None, ylabel: Optional[str] = None,
+                **args) -> None:
         super().__init__(dataframe, y)
         self._groupBy = groupBy
         self._xlabel: Optional[str] = xlabel
         self._ylabel: Optional[str] = ylabel
         self._title: str = title
         self._fig, self._ax = plt.subplots(layout='constrained')
+        self._args = args
 
     def plot(self, callback: Optional[Callable] = None) -> None:
         self.preplot(callback)
@@ -36,7 +38,7 @@ class ScatterGraph(Graph):
             self._scatterMultigroup()
         else: 
             self._ax.scatter(self._dataframe[self._groupBy], self._dataframe[self._y],
-                    color ='blue')
+                    color ='blue', **self._args)
         self._ax.set_title(self._title)
         if self._xlabel is not None:
             self._ax.set_xlabel(self._xlabel)
@@ -62,7 +64,8 @@ class ScatterGraph(Graph):
         for index, y in enumerate(self._y):
             offset = width * multiplier
             self._ax.scatter(x + offset, self._dataframe[y], s=100,
-                                    color=colorMap(index % len(self._y)), label=y)
+                                    color=colorMap(index % len(self._y)), label=y,
+                                    **self._args)
             multiplier += 1
 
         self._ax.set_xticks(x + width, self._dataframe[self._groupBy])
