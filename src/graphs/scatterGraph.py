@@ -1,10 +1,11 @@
 '''
-Bar chart visualization
+Scatter chart visualization
 '''
 
 import inspect
 from typing import Optional
 from collections.abc import Callable
+from collections.abc import Sequence
 
 from pandas import DataFrame
 import matplotlib.pyplot as plt
@@ -31,11 +32,11 @@ class ScatterGraph(Graph):
 
     def preplot(self, callback: Optional[Callable]):
         # Because I want to accept any object that has [] operator implemented
-        if hasattr(self._y, '__iter__') and hasattr(self._y, '__getitem__'):
+        if isinstance(self._y, Sequence) and not isinstance(self._y, str):
             self._scatterMultigroup()
         else: 
             self._ax.scatter(self._dataframe[self._groupBy], self._dataframe[self._y],
-                    color ='blue', width = 0.4)
+                    color ='blue')
         self._ax.set_title(self._title)
         if self._xlabel is not None:
             self._ax.set_xlabel(self._xlabel)

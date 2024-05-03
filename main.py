@@ -42,6 +42,21 @@ def _drawTopCountry() -> None:
         ax.xaxis.set_tick_params(labelrotation=60, length=8)
     visualization.show(post=applyExtraConfig)
 
+# WIP, I am gonna make the GPD-artificial_total scatter
+def _showViolinGraph(dataframe) -> None:
+    visualization = Visualization(dataframe, y='x1',
+                                  groupBy='country', title='Approx. living cost',
+                                  hue='country')
+    visualization.setGraph(GraphType.VIOLIN)
+    visualization.show()
+
+def _showBoxplotGraph(dataframe) -> None:
+    visualization = Visualization(dataframe, y=['x1','x28'],
+                                  groupBy='country', title='Approx. living cost')
+    visualization.setGraph(GraphType.BOXPLOT)
+    visualization.show()
+
+
 def main() -> None:
     # _drawTopCountry()
 
@@ -54,12 +69,12 @@ def main() -> None:
     subsetByCountry = groupByAggreate(subset,"country", "mean")
 
     newCol = map(lambda x : x[0] * 365 + x[1] * 365 + x[2] * 12 ,subsetByCountry.values)
-    subsetByCountry["fuckingaggregateofhell"] = list(newCol)
+    subsetByCountry["artificial_total"] = list(newCol)
 
     superjoin = dataframeGDP.join(subsetByCountry, on="Country Name")
 
-    # Get x1, x28, x49, 2022
-    onlyInterestingColumns = (superjoin[['Country Name', 'fuckingaggregateofhell',
+    # # Get x1, x28, x49, 2022
+    onlyInterestingColumns = (superjoin[['Country Name', 'artificial_total',
                                           '2022']].dropna())
 
     visualization = Visualization(onlyInterestingColumns, y=['fuckingaggregateofhell'],
@@ -68,15 +83,19 @@ def main() -> None:
     visualization.show()
 
 
-    #gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
-    #                             geometry = onlyInterestingColumns['Country Name'].map(lambda x : get_coordinates(x)), 
-    #                             crs = "EPSG:4326")
-    #visualization2 = Visualization(gdf, "2022", None, None)
-    #visualization2.setGraph(GraphType.MAP)
-    #visualization2.show()
+    gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
+                                 geometry = onlyInterestingColumns['Country Name'].map(lambda x : get_coordinates(x)), 
+                                 crs = "EPSG:4326")
+    visualization2 = Visualization(gdf, "2022", None, None)
+    visualization2.setGraph(GraphType.MAP)
+    visualization2.show()
+
     # TODO:
     # Change representation to better visualize GDP.
     # Refactor all dataframe things into a UtilityClass/Wrapper
+
+    # _showBoxplotGraph(subset.head(15))
+    # _showViolinGraph(subset.head(12))
 
 if __name__ == '__main__':
     main()
