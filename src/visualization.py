@@ -11,6 +11,7 @@ from collections.abc import Callable
 from pandas import DataFrame
 import matplotlib.pyplot as plt
 
+from graphs.machinelearning.scatterWithClustering import ScatterWithClustering
 from src.graphs.machinelearning.scatterWithRegression import ScatterWithRegressionGraph
 from src.graphs.machinelearning.decisionTreeGraph import DecissionTreeGraph
 
@@ -33,6 +34,7 @@ class GraphType(Enum):
     REGRESSION_SCATTER = 6,
     VIOLIN = 7,
     BOXPLOT = 8,
+    CLUSTERING_SCATTER=9
 
 class Visualization:
 
@@ -93,5 +95,9 @@ class Visualization:
                                         **self._args)
         if graphType == GraphType.REGRESSION_SCATTER:
             self._graph = ScatterWithRegressionGraph(self._dataframe,
+                                                     self._y, self._groupBy,
+                                                     self._title, **self._args)
+        if graphType == GraphType.CLUSTERING_SCATTER:
+            self._graph = ScatterWithClustering(self._dataframe,
                                                      self._y, self._groupBy,
                                                      self._title, **self._args)

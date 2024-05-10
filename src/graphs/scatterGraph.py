@@ -38,7 +38,7 @@ class ScatterGraph(Graph):
             self._scatterMultigroup()
         else: 
             self._ax.scatter(self._dataframe[self._groupBy], self._dataframe[self._y],
-                    color ='blue', **self._args)
+                    color =self._args['color'] if 'color' in self._args else 'blue' , **self._args)
         self._ax.set_title(self._title)
         if self._xlabel is not None:
             self._ax.set_xlabel(self._xlabel)

@@ -28,7 +28,4 @@ class ScatterWithRegressionGraph(ScatterGraph):
         self._ax.plot(self._regression_x, self._predicted_y, color="blue",
                       linewidth=3, **self._args)
 
-        # plt.xticks(())
-        # plt.yticks(())
-
-        plt.savefig("a.png")
+        plt.show()
