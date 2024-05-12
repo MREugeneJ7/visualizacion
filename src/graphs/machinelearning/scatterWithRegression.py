@@ -25,7 +25,7 @@ class ScatterWithRegressionGraph(ScatterGraph):
     
     def plot(self, callback: Callable[..., Any] | None = None) -> None:
         super().preplot(callback)
-        self._ax.plot(self._regression_x, self._predicted_y, color="blue",
+        self._ax.plot(self._regression_x, self._predicted_y, color="red",
                       linewidth=3, **self._args)
 
         plt.show()

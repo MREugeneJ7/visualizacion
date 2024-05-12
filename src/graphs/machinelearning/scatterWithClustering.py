@@ -17,11 +17,13 @@ class ScatterWithClustering(ScatterGraph):
         self._model = self.agglomerativeClustering() 
 
     def agglomerativeClustering(self):
-        clustering = AgglomerativeClustering(distance_threshold=0, linkage=self._args["clusteringType"], n_clusters=None)
+        #TODO: change distance/n_clusters
+        clustering = AgglomerativeClustering(distance_threshold=0, linkage=self._args["clustering_type"], n_clusters=None)
         return clustering.fit(self._dataframe)
     
     def plot(self, callback: Callable[..., Any] | None = None) -> None:
-        self._args['color'] = self._model.labels_
+        self._args['c'] = self._model.labels_
+        del self._args['clustering_type']
         super().preplot(callback)
         plt.show()
 

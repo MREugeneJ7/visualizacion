@@ -11,7 +11,7 @@ from collections.abc import Callable
 from pandas import DataFrame
 import matplotlib.pyplot as plt
 
-from graphs.machinelearning.scatterWithClustering import ScatterWithClustering
+from src.graphs.machinelearning.scatterWithClustering import ScatterWithClustering
 from src.graphs.machinelearning.scatterWithRegression import ScatterWithRegressionGraph
 from src.graphs.machinelearning.decisionTreeGraph import DecissionTreeGraph
 

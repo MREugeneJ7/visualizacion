@@ -77,8 +77,8 @@ def main() -> None:
     onlyInterestingColumns = (superjoin[['Country Name', 'artificial_total',
                                           '2022']].dropna())
 
-    visualization = Visualization(onlyInterestingColumns, y=['artificial_total'],
-                                  groupBy='2022', title='GDP each year per country')
+    visualization = Visualization(dataframe=onlyInterestingColumns[['2022', 'artificial_total']], y='2022',
+                                  groupBy='artificial_total', title='GDP each year per country')
     visualization.setGraph(GraphType.REGRESSION_SCATTER)
     visualization.show()
 
