@@ -9,11 +9,15 @@ __date__ = "2024/04/03"
 
 import pandas as pd
 import numpy as np
+import geopandas
+
+from shapely import Point
+import pycountry
+from geopy import Nominatim
 
 from src.visualization import Visualization
 from src.visualization import GraphType
 from src.reader import Reader
-import geopandas
 from src.util.dataframeUtil import groupByAggreate, subset as ss
 from src.util.geographicUtils import get_coordinates
 
@@ -76,15 +80,24 @@ def main() -> None:
     # # Get x1, x28, x49, 2022
     onlyInterestingColumns = (superjoin[['Country Name', 'artificial_total',
                                           '2022']].dropna())
+    def getPoints(country):
+        try:
+            country_obj = pycountry.countries.get(name=country)
+            geolocator = Nominatim(user_agent="amd-project-ull")
+            location = geolocator.geocode(country_obj.name)
+            return Point(location.latitude, location.longitude)
+        except AttributeError:
+            return None
 
-    visualization = Visualization(dataframe=onlyInterestingColumns[['2022', 'artificial_total']], y='2022',
+    gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
+                            geometry = onlyInterestingColumns['Country Name'].map(lambda x : getPoints(x)), 
+                            crs = "EPSG:4326")
+    visualization = Visualization(dataframe=gdf, y='2022',
                                   groupBy='artificial_total', title='GDP each year per country')
-    visualization.setGraph(GraphType.REGRESSION_SCATTER)
+    visualization.setGraph(GraphType.MAP)
     visualization.show()
 
-    # gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
-    #                              geometry = onlyInterestingColumns['Country Name'].map(lambda x : get_coordinates(x)), 
-    #                              crs = "EPSG:4326")
+
     # visualization2 = Visualization(gdf, "2022", None, None)
     # visualization2.setGraph(GraphType.MAP)
     # visualization2.show()
