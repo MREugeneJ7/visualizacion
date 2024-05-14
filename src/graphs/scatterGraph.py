@@ -37,11 +37,8 @@ class ScatterGraph(Graph):
         if isinstance(self._y, Sequence) and not isinstance(self._y, str):
             self._scatterMultigroup()
         else: 
-            #TODO: check what happens if c and color are in the same scatter
-            self._args['color'] = None if 'c' in self._args else 'blue'
-            self._ax.scatter(self._dataframe[self._groupBy], self._dataframe[self._y],
+            self._ax.scatter(self._dataframe[self._groupBy], self._dataframe[self._y], 
                     **self._args)
-            del self._args['color']
         self._ax.set_title(self._title)
         if self._xlabel is not None:
             self._ax.set_xlabel(self._xlabel)
