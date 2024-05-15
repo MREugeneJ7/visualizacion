@@ -13,7 +13,8 @@ class WorldMapGraph(Graph):
 
     # self._y is the column to use for coloring
     def plot(self) -> None:
-        print("Plotting world map")
         ax = self._dataframe.plot(self._y, legend = True)
         cx.add_basemap(ax, crs=self._dataframe.crs)
+        plt.title(self._title)
+        plt.axis('off')
         plt.show()
