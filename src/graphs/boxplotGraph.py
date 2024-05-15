@@ -1,5 +1,5 @@
 '''
-Violin chart visualization
+Boxplot chart visualization
 '''
 
 import inspect

@@ -17,22 +17,8 @@ from src.reader import Reader
 from src.util.dataframeUtil import groupByAggreate, subset as ss
 from src.util.geographicUtils import getPoints
 
-def _drawTopCountry() -> None:
-    print('Reading csv file.')
-    reader = Reader('cost-of-living.csv')
-    dataframe = reader.getDataFrame()
-
-    # calculate top 20 countries with the most expensive economic type food
-    topX1: pd.Series[np.float64] = dataframe.groupby('country')['x1'].transform('max')
-    dataframeWithOnlyTopCountries = (
-        dataframe[dataframe['x1'] == topX1]
-        .drop_duplicates(subset=['country', 'x1'])
-        .nlargest(20, 'x1')
-    )
-
-    
-    print('Visualising the result.')
-    visualization = Visualization(dataframeWithOnlyTopCountries, y=['x1','x2'],
+def _drawTopCountry(dataframe) -> None:
+    visualization = Visualization(dataframe, y=['x1','x2'],
                                   groupBy='country',
                                   title='Coste de comida económica por país')
     visualization.setGraph(GraphType.BAR)
@@ -51,26 +37,39 @@ def _showViolinGraph(dataframe) -> None:
     visualization.show()
 
 def _showBoxplotGraph(dataframe) -> None:
-    visualization = Visualization(dataframe, y=['x1','x28'],
+    visualization = Visualization(dataframe, y='x1',
                                   groupBy='country', title='Approx. living cost')
     visualization.setGraph(GraphType.BOXPLOT)
     visualization.show()
 
+def _showWorldMap(geodataframe) -> None:
+    gdf = geopandas.GeoDataFrame(geodataframe, 
+                            geometry = geodataframe['Country Name'].map(lambda x : getPoints(x)), 
+                            crs = "EPSG:4326")
+    visualization = Visualization(dataframe=gdf, y='2022',
+                                  groupBy='artificial_total', title='GDP each year per country')
+    visualization.setGraph(GraphType.MAP)
+    visualization.show()
 
 def main() -> None:
-    # _drawTopCountry()
-
     readerDf1 = Reader("cost-of-living_v2.csv", dropna = True)
     dataframeGCL = readerDf1.getDataFrame()
     readerDf2 = Reader("GDP.csv", 2)
     dataframeGDP = readerDf2.getDataFrame()
 
+    # calculate top 20 countries with the most expensive economic type food
+    topX1: pd.Series[np.float64] = dataframeGCL.groupby('country')['x1'].transform('max')
+    dataframeWithOnlyTopCountries = (
+        dataframeGCL[dataframeGCL['x1'] == topX1]
+        .drop_duplicates(subset=['country', 'x1'])
+        .nlargest(20, 'x1')
+    )
+    # _drawTopCountry(dataframeWithOnlyTopCountries)
+
     subset = ss(dataframeGCL, "country", "x1", "x28", "x49")
-    subsetByCountry = groupByAggreate(subset,"country", "mean")
-
-    newCol = map(lambda x : x[0] * 365 + x[1] * 365 + x[2] * 12 ,subsetByCountry.values)
+    subsetByCountry = groupByAggreate(subset, "country", "mean")
+    newCol = map(lambda x : x[0] * 365 + x[1] * 365 + x[2] * 12, subsetByCountry.values)
     subsetByCountry["artificial_total"] = list(newCol)
-
     superjoin = dataframeGDP.join(subsetByCountry, on="Country Name")
 
     # # Get x1, x28, x49, 2022
@@ -82,22 +81,10 @@ def main() -> None:
     # head(23) doesn't work, head(22) works
     onlyInterestingColumns = onlyInterestingColumns.head(22)
 
-    gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
-                            geometry = onlyInterestingColumns['Country Name'].map(lambda x : getPoints(x)), 
-                            crs = "EPSG:4326")
-    visualization = Visualization(dataframe=gdf, y='2022',
-                                  groupBy='artificial_total', title='GDP each year per country')
-    visualization.setGraph(GraphType.MAP)
-    visualization.show()
-
-    # visualization2 = Visualization(gdf, "2022", None, None)
-    # visualization2.setGraph(GraphType.MAP)
-    # visualization2.show()
-
     # TODO:
-    # Change representation to better visualize GDP.
     # Refactor all dataframe things into a UtilityClass/Wrapper
 
+    # _showWorldMap(onlyInterestingColumns)
     # _showBoxplotGraph(subset.head(15))
     # _showViolinGraph(subset.head(12))
 
