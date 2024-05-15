@@ -9,13 +9,13 @@ __date__ = "2024/04/03"
 
 import pandas as pd
 import numpy as np
+import geopandas
 
 from src.visualization import Visualization
 from src.visualization import GraphType
 from src.reader import Reader
-import geopandas
 from src.util.dataframeUtil import groupByAggreate, subset as ss
-from src.util.geographicUtils import get_coordinates
+from src.util.geographicUtils import getPoints
 
 def _drawTopCountry() -> None:
     print('Reading csv file.')
@@ -76,15 +76,20 @@ def main() -> None:
     # # Get x1, x28, x49, 2022
     onlyInterestingColumns = (superjoin[['Country Name', 'artificial_total',
                                           '2022']].dropna())
+    
+    # temporal solution to distance being too big to display
+    onlyInterestingColumns = onlyInterestingColumns.drop(index=35)
+    # head(23) doesn't work, head(22) works
+    onlyInterestingColumns = onlyInterestingColumns.head(22)
 
-    visualization = Visualization(dataframe=onlyInterestingColumns[['2022', 'artificial_total']], y='2022',
+    gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
+                            geometry = onlyInterestingColumns['Country Name'].map(lambda x : getPoints(x)), 
+                            crs = "EPSG:4326")
+    visualization = Visualization(dataframe=gdf, y='2022',
                                   groupBy='artificial_total', title='GDP each year per country')
-    visualization.setGraph(GraphType.REGRESSION_SCATTER)
+    visualization.setGraph(GraphType.MAP)
     visualization.show()
 
-    # gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
-    #                              geometry = onlyInterestingColumns['Country Name'].map(lambda x : get_coordinates(x)), 
-    #                              crs = "EPSG:4326")
     # visualization2 = Visualization(gdf, "2022", None, None)
     # visualization2.setGraph(GraphType.MAP)
     # visualization2.show()
