@@ -78,8 +78,8 @@ def main() -> None:
                                           '2022']].dropna())
 
     visualization = Visualization(dataframe=onlyInterestingColumns[['2022', 'artificial_total']], y='2022',
-                                  groupBy='artificial_total', title='GDP each year per country')
-    visualization.setGraph(GraphType.REGRESSION_SCATTER)
+                                  groupBy='artificial_total', title='GDP each year per country', epsilon=18000)
+    visualization.setGraph(GraphType.OUTLIER_DETECTION_SCATTER)
     visualization.show()
 
     # gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
