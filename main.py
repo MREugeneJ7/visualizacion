@@ -41,11 +41,11 @@ def _showBoxplotGraph(dataframe) -> None:
     visualization.setGraph(GraphType.BOXPLOT)
     visualization.show()
 
-def _showWorldMap(geodataframe) -> None:
+def _showWorldMap(geodataframe, colorMap) -> None:
     gdf = geopandas.GeoDataFrame(geodataframe, 
                             geometry = geodataframe['city'].map(lambda x : getPoints(x + ", Spain")), 
                             crs = "EPSG:4326")
-    visualization = Visualization(dataframe=gdf, y='x54',
+    visualization = Visualization(dataframe=gdf, y=colorMap,
                                   groupBy='artificial_total', title='GDP each year per country')
     visualization.setGraph(GraphType.MAP)
     visualization.show()
@@ -72,32 +72,11 @@ def main() -> None:
                                   groupBy='artificial_total', title='Cost of living vs Expected salary')
     visualization.setGraph(GraphType.REGRESSION_SCATTER)
     visualization.show()
-    visualization.getOutput()
-
-    # gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
-    #                              geometry = onlyInterestingColumns['Country Name'].map(lambda x : get_coordinates(x)), 
-    #                              crs = "EPSG:4326")
-    # visualization2 = Visualization(gdf, "2022", None, None)
-    # visualization2.setGraph(GraphType.MAP)
-    # visualization2.show()
-
-    # TODO:
-    # Change representation to better visualize GDP.
-    # Refactor all dataframe things into a UtilityClass/Wrapper
-    # temporal solution to distance being too big to display
-    # head(23) doesn't work, head(22) works
+    colorMap = visualization.getOutput()
     
-    _showWorldMap(onlyInterestingColumns)
+    _showWorldMap(onlyInterestingColumns, colorMap)
     # _showBoxplotGraph(subset.head(15))
     # _showViolinGraph(subset.head(12))
-
-    # countryAmount = len(pd.unique(dataframeGCL['country']))
-    # visualizationCluster = Visualization(dataframeGCL, y=['x1', 'x28', 'x49'],
-    #                                      groupBy='country', title='Cluster groups',
-    #                                      clusteringColumns=['x1', 'x28', 'x49'],
-    #                                      n_clusters=countryAmount)
-    # visualizationCluster.setGraph(GraphType.CLUSTERING_SCATTER)
-    # visualizationCluster.show()
 
 if __name__ == '__main__':
     main()
