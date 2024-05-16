@@ -68,6 +68,21 @@ def main() -> None:
     onlyInterestingColumns = (superjoin[['Country Name', 'artificial_total',
                                           '2022']].dropna())
 
+    visualization = Visualization(dataframe=onlyInterestingColumns[['2022', 'artificial_total']], y='2022',
+                                  groupBy='artificial_total', title='GDP each year per country', epsilon=18000)
+    visualization.setGraph(GraphType.OUTLIER_DETECTION_SCATTER)
+    visualization.show()
+
+    # gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
+    #                              geometry = onlyInterestingColumns['Country Name'].map(lambda x : get_coordinates(x)), 
+    #                              crs = "EPSG:4326")
+    # visualization2 = Visualization(gdf, "2022", None, None)
+    # visualization2.setGraph(GraphType.MAP)
+    # visualization2.show()
+
+    # TODO:
+    # Change representation to better visualize GDP.
+    # Refactor all dataframe things into a UtilityClass/Wrapper
     # temporal solution to distance being too big to display
     onlyInterestingColumns = onlyInterestingColumns.drop(index=35)
     # head(23) doesn't work, head(22) works
