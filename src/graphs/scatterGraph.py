@@ -32,13 +32,13 @@ class ScatterGraph(Graph):
 
         plt.show()
 
-    def preplot(self, callback: Optional[Callable]):
+    def preplot(self, callback: Optional[Callable], **additionalArgs):
         # Because I want to accept any object that has [] operator implemented
         if isinstance(self._y, Sequence) and not isinstance(self._y, str):
             self._scatterMultigroup()
         else: 
             self._ax.scatter(self._dataframe[self._groupBy], self._dataframe[self._y], 
-                    **self._args)
+                    **self._args, **additionalArgs)
         self._ax.set_title(self._title)
         if self._xlabel is not None:
             self._ax.set_xlabel(self._xlabel)

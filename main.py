@@ -72,6 +72,7 @@ def main() -> None:
                                   groupBy='artificial_total', title='Cost of living vs Expected salary')
     visualization.setGraph(GraphType.REGRESSION_SCATTER)
     visualization.show()
+    visualization.getOutput()
 
     # gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
     #                              geometry = onlyInterestingColumns['Country Name'].map(lambda x : get_coordinates(x)), 
@@ -90,13 +91,13 @@ def main() -> None:
     # _showBoxplotGraph(subset.head(15))
     # _showViolinGraph(subset.head(12))
 
-    countryAmount = len(pd.unique(dataframeGCL['country']))
-    visualizationCluster = Visualization(dataframeGCL, y=['x1', 'x28', 'x49'],
-                                         groupBy='country', title='Cluster groups',
-                                         clusteringColumns=['x1', 'x28', 'x49'],
-                                         n_clusters=countryAmount)
-    visualizationCluster.setGraph(GraphType.CLUSTERING_SCATTER)
-    visualizationCluster.show()
+    # countryAmount = len(pd.unique(dataframeGCL['country']))
+    # visualizationCluster = Visualization(dataframeGCL, y=['x1', 'x28', 'x49'],
+    #                                      groupBy='country', title='Cluster groups',
+    #                                      clusteringColumns=['x1', 'x28', 'x49'],
+    #                                      n_clusters=countryAmount)
+    # visualizationCluster.setGraph(GraphType.CLUSTERING_SCATTER)
+    # visualizationCluster.show()
 
 if __name__ == '__main__':
     main()

@@ -50,6 +50,14 @@ class Visualization:
         self._title: str = title
         self._args = args
 
+    # meant for machine learning module
+    def getOutput(self):
+        if self._graphType == GraphType.REGRESSION_SCATTER or (
+            self._graphType == GraphType.CLUSTERING_SCATTER) or (
+            self._graphType == GraphType.OUTLIER_DETECTION_SCATTER):
+            return self._graph.getOutput()
+        return None
+
     # pre is called before plotting the graph, while post is called
     # after plotting the graph
     def show(self, pre: Optional[Callable] = None,
@@ -107,3 +115,4 @@ class Visualization:
             self._graph = ScatterWithOutliers(self._dataframe,
                                                      self._y, self._groupBy,
                                                      self._title, **self._args)
+        self._graphType = graphType
