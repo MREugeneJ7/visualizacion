@@ -9,6 +9,8 @@ __date__ = "2024/04/03"
 
 import geopandas
 
+import pandas as pd
+
 from src.visualization import Visualization
 from src.visualization import GraphType
 from src.reader import Reader
@@ -56,7 +58,7 @@ def main() -> None:
 
     # calculate top 20 countries with the most expensive economic type food
     dataframeWithOnlyTopCountries = firstNMaxByGroup(dataframeGCL, 20, 'country', 'x1')
-    _drawTopCountry(dataframeWithOnlyTopCountries)
+    # _drawTopCountry(dataframeWithOnlyTopCountries)
 
     dataframeGCL = dataframeGCL[dataframeGCL["country"] == "Spain"]
     subset = ss(dataframeGCL, "city", "x1", "x28", "x49", "x54")
@@ -87,6 +89,14 @@ def main() -> None:
     _showWorldMap(onlyInterestingColumns)
     # _showBoxplotGraph(subset.head(15))
     # _showViolinGraph(subset.head(12))
+
+    countryAmount = len(pd.unique(dataframeGCL['country']))
+    visualizationCluster = Visualization(dataframeGCL, y=['x1', 'x28', 'x49'],
+                                         groupBy='country', title='Cluster groups',
+                                         clusteringColumns=['x1', 'x28', 'x49'],
+                                         n_clusters=countryAmount)
+    visualizationCluster.setGraph(GraphType.CLUSTERING_SCATTER)
+    visualizationCluster.show()
 
 if __name__ == '__main__':
     main()
