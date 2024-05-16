@@ -41,9 +41,9 @@ def _showBoxplotGraph(dataframe) -> None:
 
 def _showWorldMap(geodataframe) -> None:
     gdf = geopandas.GeoDataFrame(geodataframe, 
-                            geometry = geodataframe['Country Name'].map(lambda x : getPoints(x)), 
+                            geometry = geodataframe['city'].map(lambda x : getPoints(x + ", Spain")), 
                             crs = "EPSG:4326")
-    visualization = Visualization(dataframe=gdf, y='2022',
+    visualization = Visualization(dataframe=gdf, y='x54',
                                   groupBy='artificial_total', title='GDP each year per country')
     visualization.setGraph(GraphType.MAP)
     visualization.show()
@@ -58,17 +58,17 @@ def main() -> None:
     dataframeWithOnlyTopCountries = firstNMaxByGroup(dataframeGCL, 20, 'country', 'x1')
     _drawTopCountry(dataframeWithOnlyTopCountries)
 
-    subset = ss(dataframeGCL, "country", "x1", "x28", "x49")
-    subsetByCountry = groupByAggreate(subset, "country", "mean")
-    newCol = map(lambda x : x[0] * 365 + x[1] * 365 + x[2] * 12, subsetByCountry.values)
-    subsetByCountry["artificial_total"] = list(newCol)
-    superjoin = dataframeGDP.join(subsetByCountry, on="Country Name")
-    onlyInterestingColumns = (superjoin[['Country Name', 'artificial_total',
-                                          '2022']].dropna())
+    dataframeGCL = dataframeGCL[dataframeGCL["country"] == "Spain"]
+    subset = ss(dataframeGCL, "city", "x1", "x28", "x49", "x54")
+    newCol = map(lambda x : x[1] * 365 + x[2] * 365 + x[3] * 12, subset.values)
+    subset["artificial_total"] = list(newCol)
+    subset['x54'] = subset['x54'].map(lambda x : x * 12)
+    onlyInterestingColumns = subset[['city', 'artificial_total',
+                                          'x54']].dropna()
 
-    visualization = Visualization(dataframe=onlyInterestingColumns[['2022', 'artificial_total']], y='2022',
-                                  groupBy='artificial_total', title='GDP each year per country', epsilon=18000)
-    visualization.setGraph(GraphType.OUTLIER_DETECTION_SCATTER)
+    visualization = Visualization(dataframe=onlyInterestingColumns[['x54', 'artificial_total']], y='x54',
+                                  groupBy='artificial_total', title='Cost of living vs Expected salary')
+    visualization.setGraph(GraphType.REGRESSION_SCATTER)
     visualization.show()
 
     # gdf = geopandas.GeoDataFrame(onlyInterestingColumns, 
@@ -82,11 +82,9 @@ def main() -> None:
     # Change representation to better visualize GDP.
     # Refactor all dataframe things into a UtilityClass/Wrapper
     # temporal solution to distance being too big to display
-    onlyInterestingColumns = onlyInterestingColumns.drop(index=35)
     # head(23) doesn't work, head(22) works
-    onlyInterestingColumns = onlyInterestingColumns.head(22)
-
-    # _showWorldMap(onlyInterestingColumns)
+    
+    _showWorldMap(onlyInterestingColumns)
     # _showBoxplotGraph(subset.head(15))
     # _showViolinGraph(subset.head(12))
 
